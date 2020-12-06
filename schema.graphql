@@ -2,7 +2,6 @@ type Position @entity {
   id: ID!
   trader: Bytes! # address
   margin: BigInt! # uint256
-  positionNotional: BigInt! # uint256
   realizedPnl: BigInt! # int256
   unrealizedPnl: BigInt! # int256
   fee: BigInt! # uint256
@@ -18,7 +17,6 @@ type AmmPosition @entity {
   amm: Bytes! # address
   trader: Bytes! # address
   margin: BigInt! # uint256
-  positionNotional: BigInt! # uint256
   positionSize: BigInt! # int256
   realizedPnl: BigInt! # int256
   unrealizedPnl: BigInt! # int256

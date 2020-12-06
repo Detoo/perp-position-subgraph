@@ -23,9 +23,8 @@ export function handlePositionChanged(event: PositionChanged): void {
   if (!position) {
     position = createPosition(positionId)
   }
-  position.margin = position.margin.plus(event.params.margin)
-  position.positionNotional = position.positionNotional.plus(event.params.positionNotional)
-  position.realizedPnl = position.realizedPnl.plus(event.params.realizedPnl)
+  position.margin = event.params.margin // snapshot
+  position.realizedPnl = position.realizedPnl.plus(event.params.realizedPnl) // delta
   position.unrealizedPnl = event.params.unrealizedPnlAfter
   position.fee = position.fee.plus(event.params.fee)
   position.badDebt = position.badDebt.plus(event.params.badDebt)
@@ -42,10 +41,9 @@ export function handlePositionChanged(event: PositionChanged): void {
   if (!ammPosition) {
     ammPosition = createAmmPosition(event.params.amm, event.params.trader)
   }
-  ammPosition.margin = ammPosition.margin.plus(event.params.margin)
-  ammPosition.positionNotional = ammPosition.positionNotional.plus(event.params.positionNotional)
+  ammPosition.margin = event.params.margin // snapshot
   ammPosition.positionSize = event.params.positionSizeAfter
-  ammPosition.realizedPnl = ammPosition.realizedPnl.plus(event.params.realizedPnl)
+  ammPosition.realizedPnl = ammPosition.realizedPnl.plus(event.params.realizedPnl) // delta
   ammPosition.unrealizedPnl = event.params.unrealizedPnlAfter
   ammPosition.fee = ammPosition.fee.plus(event.params.fee)
   ammPosition.badDebt = ammPosition.badDebt.plus(event.params.badDebt)

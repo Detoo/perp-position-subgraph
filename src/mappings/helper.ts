@@ -5,7 +5,6 @@ export function createPosition(positionId: string): Position {
   let position = new Position(positionId)
   position.trader = Bytes.fromHexString(positionId) as Bytes
   position.margin = BigInt.fromI32(0)
-  position.positionNotional = BigInt.fromI32(0)
   position.realizedPnl = BigInt.fromI32(0)
   position.unrealizedPnl = BigInt.fromI32(0)
   position.fee = BigInt.fromI32(0)
@@ -23,7 +22,6 @@ export function createAmmPosition(amm: Address, trader: Address): AmmPosition {
   ammPosition.amm = amm
   ammPosition.trader = trader
   ammPosition.margin = BigInt.fromI32(0)
-  ammPosition.positionNotional = BigInt.fromI32(0)
   ammPosition.positionSize = BigInt.fromI32(0)
   ammPosition.realizedPnl = BigInt.fromI32(0)
   ammPosition.unrealizedPnl = BigInt.fromI32(0)
