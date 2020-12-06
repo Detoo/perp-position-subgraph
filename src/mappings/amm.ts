@@ -12,5 +12,7 @@ export function handleFundingRateUpdated(event: FundingRateUpdated): void {
   entity.amm = event.address
   entity.rate = event.params.rate
   entity.underlyingPrice = event.params.underlyingPrice
+  entity.blockNumber = event.block.number
+  entity.timestamp = event.block.timestamp
   entity.save()
 }

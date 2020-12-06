@@ -26,6 +26,8 @@ export function handlePositionChanged(event: PositionChanged): void {
   entity.liquidationPenalty = event.params.liquidationPenalty
   entity.quoteAssetReserve = event.params.quoteAssetReserve
   entity.baseAssetReserve = event.params.baseAssetReserve
+  entity.blockNumber = event.block.number
+  entity.timestamp = event.block.timestamp
   entity.save()
 }
 
@@ -44,5 +46,7 @@ export function handlePositionLiquidated(event: PositionLiquidated): void {
   entity.liquidationFee = event.params.liquidationFee
   entity.liquidator = event.params.liquidator
   entity.badDebt = event.params.badDebt
+  entity.blockNumber = event.block.number
+  entity.timestamp = event.block.timestamp
   entity.save()
 }

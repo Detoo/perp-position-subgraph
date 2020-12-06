@@ -8,9 +8,9 @@ type Position @entity {
   fee: BigInt! # uint256
   badDebt: BigInt! # uint256
   liquidationPenalty: BigInt! # uint256
-  blockNumber: Int! # last updated block number
-  timestamp: Int! # last updated timestamp
   ammPositions: [AmmPosition!] # breakdown for each Amm
+  blockNumber: BigInt! # last updated block number
+  timestamp: BigInt! # last updated timestamp
 }
 
 type AmmPosition @entity {
@@ -25,8 +25,8 @@ type AmmPosition @entity {
   fee: BigInt! # uint256
   badDebt: BigInt! # uint256
   liquidationPenalty: BigInt! # uint256
-  blockNumber: Int! # last updated block number
-  timestamp: Int! # last updated timestamp
+  blockNumber: BigInt! # last updated block number
+  timestamp: BigInt! # last updated timestamp
 }
 
 type PositionChangedEvent @entity {
@@ -44,6 +44,8 @@ type PositionChangedEvent @entity {
   liquidationPenalty: BigInt! # uint256
   quoteAssetReserve: BigInt! # uint256
   baseAssetReserve: BigInt! # uint256
+  blockNumber: BigInt! # last updated block number
+  timestamp: BigInt! # last updated timestamp
 }
 
 type PositionLiquidatedEvent @entity {
@@ -55,6 +57,8 @@ type PositionLiquidatedEvent @entity {
   liquidationFee: BigInt! # uint256
   liquidator: Bytes! # address
   badDebt: BigInt! # uint256
+  blockNumber: BigInt! # last updated block number
+  timestamp: BigInt! # last updated timestamp
 }
 
 type FundingRateUpdatedEvent @entity {
@@ -62,4 +66,6 @@ type FundingRateUpdatedEvent @entity {
   amm: Bytes! # address
   rate: BigInt! # int256
   underlyingPrice: BigInt! # int256
+  blockNumber: BigInt! # last updated block number
+  timestamp: BigInt! # last updated timestamp
 }
