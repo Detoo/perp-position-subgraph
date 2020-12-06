@@ -1,11 +1,13 @@
 {
-  "name": "perp-subgraph",
+  "name": "perp-position-subgraph",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "codegen": "graph codegen",
-    "build": "npm run codegen && graph build"
+    "build": "npm run codegen && graph build",
+    "auth": "graph auth https://api.thegraph.com/deploy/ ${THE_GRAPH_ACCESS_TOKEN}",
+    "deploy": "graph deploy detoo/perp-position-subgraph --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/"
   },
   "keywords": [],
   "author": "",
