@@ -280,7 +280,7 @@
   },
   {
     "inputs": [],
-    "name": "fluctuationLimit",
+    "name": "fluctuationLimitRatio",
     "outputs": [
       {
         "internalType": "uint256",
@@ -674,6 +674,26 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getOpenInterestNotionalCap",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "d",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Decimal.decimal",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "enum IAmm.Dir",
@@ -1020,7 +1040,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_fluctuationLimit",
+        "name": "_fluctuationLimitRatio",
         "type": "uint256"
       },
       {
@@ -1051,6 +1071,18 @@
         ],
         "internalType": "struct Decimal.decimal",
         "name": "_liquidityMultiplier",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "d",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Decimal.decimal",
+        "name": "_fluctuationLimitRatio",
         "type": "tuple"
       }
     ],
@@ -1208,6 +1240,38 @@
   {
     "inputs": [
       {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "d",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Decimal.decimal",
+        "name": "_maxHoldingBaseAsset",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "d",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Decimal.decimal",
+        "name": "_openInterestNotionalCap",
+        "type": "tuple"
+      }
+    ],
+    "name": "setCap",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_counterParty",
         "type": "address"
@@ -1229,11 +1293,11 @@
           }
         ],
         "internalType": "struct Decimal.decimal",
-        "name": "_fluctuationLimit",
+        "name": "_fluctuationLimitRatio",
         "type": "tuple"
       }
     ],
-    "name": "setFluctuationLimit",
+    "name": "setFluctuationLimitRatio",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1247,26 +1311,6 @@
       }
     ],
     "name": "setGlobalShutdown",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "d",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Decimal.decimal",
-        "name": "_maxHoldingBaseAsset",
-        "type": "tuple"
-      }
-    ],
-    "name": "setMaxHoldingBaseAsset",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

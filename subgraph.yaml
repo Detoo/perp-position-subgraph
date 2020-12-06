@@ -28,6 +28,8 @@ dataSources:
           handler: handlePositionChanged
         - event: PositionLiquidated(address,address,uint256,uint256,uint256,address,uint256)
           handler: handlePositionLiquidated
+        - event: MarginChanged(address,address,int256)
+          handler: handleMarginChanged
 
   - kind: ethereum/contract
     name: AmmBTCUSDC

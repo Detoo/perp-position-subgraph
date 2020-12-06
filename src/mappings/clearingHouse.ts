@@ -1,6 +1,7 @@
 import {
   PositionChanged,
   PositionLiquidated,
+  MarginChanged,
 } from "../../generated/ClearingHouse/ClearingHouse"
 import {
   Position,
@@ -92,4 +93,36 @@ export function handlePositionLiquidated(event: PositionLiquidated): void {
   entity.blockNumber = event.block.number
   entity.timestamp = event.block.timestamp
   entity.save()
+}
+
+/* Trader margin changed
+ *
+ * adjust Position margin accordingly
+ */
+export function handleMarginChanged(event: MarginChanged): void {
+  //
+  // upsert corresponding Position
+  //
+  let positionId = event.params.sender.toHexString()
+  let position = Position.load(positionId)
+  if (!position) {
+    position = createPosition(positionId)
+  }
+  position.margin = position.margin.plus(event.params.amount) // delta
+  position.blockNumber = event.block.number
+  position.timestamp = event.block.timestamp
+  position.save()
+
+  //
+  // upsert corresponding AmmPosition
+  //
+  let ammPositionId = parseAmmPositionId(event.params.amm, event.params.sender)
+  let ammPosition = AmmPosition.load(ammPositionId)
+  if (!ammPosition) {
+    ammPosition = createAmmPosition(event.params.amm, event.params.sender)
+  }
+  ammPosition.margin = ammPosition.margin.plus(event.params.amount) // delta
+  ammPosition.blockNumber = event.block.number
+  ammPosition.timestamp = event.block.timestamp
+  ammPosition.save()
 }

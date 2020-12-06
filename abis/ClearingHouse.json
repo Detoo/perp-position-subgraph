@@ -4,19 +4,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "feePool",
-        "type": "address"
-      }
-    ],
-    "name": "FeePoolSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "liquidationFeeRatio",
         "type": "uint256"
@@ -42,12 +29,12 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "int256",
         "name": "amount",
-        "type": "uint256"
+        "type": "int256"
       }
     ],
-    "name": "MarginAdded",
+    "name": "MarginChanged",
     "type": "event"
   },
   {
@@ -61,37 +48,6 @@
       }
     ],
     "name": "MarginRatioChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "amm",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "int256",
-        "name": "marginRatio",
-        "type": "int256"
-      }
-    ],
-    "name": "MarginRemoved",
     "type": "event"
   },
   {
@@ -143,9 +99,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "int256",
         "name": "newPositionSize",
-        "type": "uint256"
+        "type": "int256"
       },
       {
         "indexed": false,
@@ -355,25 +311,6 @@
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "add",
-        "type": "bool"
-      }
-    ],
-    "name": "WhitelistChanged",
-    "type": "event"
-  },
-  {
     "inputs": [
       {
         "internalType": "contract IAmm",
@@ -401,13 +338,84 @@
   {
     "inputs": [
       {
+        "internalType": "contract IAmm",
+        "name": "_amm",
+        "type": "address"
+      },
+      {
         "internalType": "address",
-        "name": "_addr",
+        "name": "_trader",
         "type": "address"
       }
     ],
-    "name": "addToWhitelists",
-    "outputs": [],
+    "name": "adjustPositionForLiquidityChanged",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "int256",
+                "name": "d",
+                "type": "int256"
+              }
+            ],
+            "internalType": "struct SignedDecimal.signedDecimal",
+            "name": "size",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "d",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct Decimal.decimal",
+            "name": "margin",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "d",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct Decimal.decimal",
+            "name": "openNotional",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "int256",
+                "name": "d",
+                "type": "int256"
+              }
+            ],
+            "internalType": "struct SignedDecimal.signedDecimal",
+            "name": "lastUpdatedCumulativePremiumFraction",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "liquidityHistoryIndex",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "blockNumber",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ClearingHouse.Position",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -654,32 +662,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_token",
-        "type": "address"
-      }
-    ],
-    "name": "getPrepaidBadDebt",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "d",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Decimal.decimal",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "contract IAmm",
         "name": "_amm",
         "type": "address"
@@ -824,25 +806,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_addr",
-        "type": "address"
-      }
-    ],
-    "name": "isInWhitelists",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "forwarder",
         "type": "address"
       }
@@ -892,6 +855,25 @@
   {
     "inputs": [],
     "name": "maintenanceMarginRatio",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "d",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "openInterestNotionalMap",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1005,19 +987,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_addr",
-        "type": "address"
-      }
-    ],
-    "name": "removeFromWhitelists",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "contract IAmm",
         "name": "_amm",
         "type": "address"
@@ -1109,6 +1078,19 @@
       }
     ],
     "name": "setOwner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_whitelist",
+        "type": "address"
+      }
+    ],
+    "name": "setWhitelist",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
