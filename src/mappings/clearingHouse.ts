@@ -12,7 +12,7 @@ import {
 /* Trader open/close/modify position
  */
 export function handlePositionChanged(event: PositionChanged): void {
-  let entity = new PositionChangedEvent(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
+  let entity = new PositionChangedEvent(event.transaction.hash.toHexString() + "-" + event.logIndex.toString())
   entity.trader = event.params.trader
   entity.amm = event.params.amm
   entity.margin = event.params.margin
@@ -36,7 +36,7 @@ export function handlePositionChanged(event: PositionChanged): void {
  *   represents the liquidation-specific information
  */
 export function handlePositionLiquidated(event: PositionLiquidated): void {
-  let entity = new PositionLiquidatedEvent(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
+  let entity = new PositionLiquidatedEvent(event.transaction.hash.toHexString() + "-" + event.logIndex.toString())
   entity.trader = event.params.trader
   entity.amm = event.params.amm
   entity.positionNotional = event.params.positionNotional
