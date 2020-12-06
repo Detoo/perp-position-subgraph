@@ -10,21 +10,19 @@ import {
   PositionLiquidatedEvent,
 } from "../../generated/schema"
 import {
-  createPosition, parseAmmPositionId, createAmmPosition,
+  getPosition, parsePositionId, createPosition,
+  getAmmPosition, parseAmmPositionId, createAmmPosition,
 } from "./helper"
 
 /* Trader open/close/modify position
  */
 export function handlePositionChanged(event: PositionChanged): void {
-  //
+  // fetch Position & AmmPosition
+  let position = getPosition(event.params.trader)
+  let ammPosition = getAmmPosition(event.params.amm, event.params.trader)
+
   // upsert corresponding Position
-  //
-  let positionId = event.params.trader.toHexString()
-  let position = Position.load(positionId)
-  if (!position) {
-    position = createPosition(positionId)
-  }
-  position.margin = event.params.margin // snapshot
+  position.margin = position.margin.minus(ammPosition.margin).plus(event.params.margin) // snapshot
   position.realizedPnl = position.realizedPnl.plus(event.params.realizedPnl) // delta
   position.unrealizedPnl = event.params.unrealizedPnlAfter
   position.fee = position.fee.plus(event.params.fee)
@@ -32,16 +30,8 @@ export function handlePositionChanged(event: PositionChanged): void {
   position.liquidationPenalty = position.liquidationPenalty.plus(event.params.liquidationPenalty)
   position.blockNumber = event.block.number
   position.timestamp = event.block.timestamp
-  position.save()
 
-  //
   // upsert corresponding AmmPosition
-  //
-  let ammPositionId = parseAmmPositionId(event.params.amm, event.params.trader)
-  let ammPosition = AmmPosition.load(ammPositionId)
-  if (!ammPosition) {
-    ammPosition = createAmmPosition(event.params.amm, event.params.trader)
-  }
   ammPosition.margin = event.params.margin // snapshot
   ammPosition.positionSize = event.params.positionSizeAfter
   ammPosition.realizedPnl = ammPosition.realizedPnl.plus(event.params.realizedPnl) // delta
@@ -51,7 +41,6 @@ export function handlePositionChanged(event: PositionChanged): void {
   ammPosition.liquidationPenalty = ammPosition.liquidationPenalty.plus(event.params.liquidationPenalty)
   ammPosition.blockNumber = event.block.number
   ammPosition.timestamp = event.block.timestamp
-  ammPosition.save()
 
   //
   // insert PositionChanged event
@@ -72,6 +61,10 @@ export function handlePositionChanged(event: PositionChanged): void {
   positionChanged.baseAssetReserve = event.params.baseAssetReserve
   positionChanged.blockNumber = event.block.number
   positionChanged.timestamp = event.block.timestamp
+
+  // commit changes
+  position.save()
+  ammPosition.save()
   positionChanged.save()
 }
 
@@ -100,29 +93,21 @@ export function handlePositionLiquidated(event: PositionLiquidated): void {
  * adjust Position margin accordingly
  */
 export function handleMarginChanged(event: MarginChanged): void {
-  //
+  // fetch Position & AmmPosition
+  let position = getPosition(event.params.sender)
+  let ammPosition = getAmmPosition(event.params.amm, event.params.sender)
+
   // upsert corresponding Position
-  //
-  let positionId = event.params.sender.toHexString()
-  let position = Position.load(positionId)
-  if (!position) {
-    position = createPosition(positionId)
-  }
   position.margin = position.margin.plus(event.params.amount) // delta
   position.blockNumber = event.block.number
   position.timestamp = event.block.timestamp
-  position.save()
 
-  //
   // upsert corresponding AmmPosition
-  //
-  let ammPositionId = parseAmmPositionId(event.params.amm, event.params.sender)
-  let ammPosition = AmmPosition.load(ammPositionId)
-  if (!ammPosition) {
-    ammPosition = createAmmPosition(event.params.amm, event.params.sender)
-  }
   ammPosition.margin = ammPosition.margin.plus(event.params.amount) // delta
   ammPosition.blockNumber = event.block.number
   ammPosition.timestamp = event.block.timestamp
+
+  // commit changes
+  position.save()
   ammPosition.save()
 }

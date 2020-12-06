@@ -1,9 +1,17 @@
 import { AmmPosition, Position } from "../../generated/schema"
-import { Bytes, BigInt, Address } from "@graphprotocol/graph-ts"
+import { BigInt, Address } from "@graphprotocol/graph-ts"
 
-export function createPosition(positionId: string): Position {
-  let position = new Position(positionId)
-  position.trader = Bytes.fromHexString(positionId) as Bytes
+export function getPosition(trader: Address): Position {
+  let position = Position.load(parsePositionId(trader))
+  if (!position) {
+    position = createPosition(trader)
+  }
+  return position!
+}
+
+export function createPosition(trader: Address): Position {
+  let position = new Position(parsePositionId(trader))
+  position.trader = trader
   position.margin = BigInt.fromI32(0)
   position.realizedPnl = BigInt.fromI32(0)
   position.unrealizedPnl = BigInt.fromI32(0)
@@ -14,6 +22,18 @@ export function createPosition(positionId: string): Position {
   position.timestamp = BigInt.fromI32(0)
   position.save()
   return position
+}
+
+export function parsePositionId(trader: Address): string {
+  return trader.toHexString()
+}
+
+export function getAmmPosition(amm: Address, trader: Address): AmmPosition {
+  let ammPosition = AmmPosition.load(parseAmmPositionId(amm, trader))
+  if (!ammPosition) {
+    ammPosition = createAmmPosition(amm, trader)
+  }
+  return ammPosition!
 }
 
 export function createAmmPosition(amm: Address, trader: Address): AmmPosition {
@@ -28,7 +48,7 @@ export function createAmmPosition(amm: Address, trader: Address): AmmPosition {
   ammPosition.fee = BigInt.fromI32(0)
   ammPosition.badDebt = BigInt.fromI32(0)
   ammPosition.liquidationPenalty = BigInt.fromI32(0)
-  ammPosition.position = ammPositionId
+  ammPosition.position = parsePositionId(trader)
   ammPosition.blockNumber = BigInt.fromI32(0)
   ammPosition.timestamp = BigInt.fromI32(0)
   ammPosition.save()
