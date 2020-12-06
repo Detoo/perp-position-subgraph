@@ -8,18 +8,55 @@ import {
   PositionChangedEvent,
   PositionLiquidatedEvent,
 } from "../../generated/schema"
-import { createPosition } from "./helper"
+import {
+  createPosition, parseAmmPositionId, createAmmPosition,
+} from "./helper"
 
 /* Trader open/close/modify position
  */
 export function handlePositionChanged(event: PositionChanged): void {
+  //
+  // upsert corresponding Position
+  //
   let positionId = event.params.trader.toHexString()
   let position = Position.load(positionId)
   if (!position) {
     position = createPosition(positionId)
   }
+  position.margin = position.margin.plus(event.params.margin)
+  position.positionNotional = position.positionNotional.plus(event.params.positionNotional)
+  position.realizedPnl = position.realizedPnl.plus(event.params.realizedPnl)
+  position.unrealizedPnl = event.params.unrealizedPnlAfter
+  position.fee = position.fee.plus(event.params.fee)
+  position.badDebt = position.badDebt.plus(event.params.badDebt)
+  position.liquidationPenalty = position.liquidationPenalty.plus(event.params.liquidationPenalty)
+  position.blockNumber = event.block.number
+  position.timestamp = event.block.timestamp
   position.save()
 
+  //
+  // upsert corresponding AmmPosition
+  //
+  let ammPositionId = parseAmmPositionId(event.params.amm, event.params.trader)
+  let ammPosition = AmmPosition.load(ammPositionId)
+  if (!ammPosition) {
+    ammPosition = createAmmPosition(event.params.amm, event.params.trader)
+  }
+  ammPosition.margin = ammPosition.margin.plus(event.params.margin)
+  ammPosition.positionNotional = ammPosition.positionNotional.plus(event.params.positionNotional)
+  ammPosition.positionSize = event.params.positionSizeAfter
+  ammPosition.realizedPnl = ammPosition.realizedPnl.plus(event.params.realizedPnl)
+  ammPosition.unrealizedPnl = event.params.unrealizedPnlAfter
+  ammPosition.fee = ammPosition.fee.plus(event.params.fee)
+  ammPosition.badDebt = ammPosition.badDebt.plus(event.params.badDebt)
+  ammPosition.liquidationPenalty = ammPosition.liquidationPenalty.plus(event.params.liquidationPenalty)
+  ammPosition.blockNumber = event.block.number
+  ammPosition.timestamp = event.block.timestamp
+  ammPosition.save()
+
+  //
+  // insert PositionChanged event
+  //
   let positionChanged = new PositionChangedEvent(event.transaction.hash.toHexString() + "-" + event.logIndex.toString())
   positionChanged.trader = event.params.trader
   positionChanged.amm = event.params.amm

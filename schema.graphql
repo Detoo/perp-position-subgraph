@@ -8,7 +8,7 @@ type Position @entity {
   fee: BigInt! # uint256
   badDebt: BigInt! # uint256
   liquidationPenalty: BigInt! # uint256
-  ammPositions: [AmmPosition!] # breakdown for each Amm
+  ammPositions: [AmmPosition!]! @derivedFrom(field: "position") # breakdown for each Amm
   blockNumber: BigInt # last updated block number
   timestamp: BigInt # last updated timestamp
 }
@@ -25,6 +25,7 @@ type AmmPosition @entity {
   fee: BigInt! # uint256
   badDebt: BigInt! # uint256
   liquidationPenalty: BigInt! # uint256
+  position: Position!
   blockNumber: BigInt # last updated block number
   timestamp: BigInt # last updated timestamp
 }
