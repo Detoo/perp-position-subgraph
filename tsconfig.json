@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "rootDirs": ["./src"],
+    "outDir": "./build",
+    "baseUrl": "./",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["esnext"],
+    "module": "commonjs",
+    "sourceMap": true,
+    "target": "es2018",
+    "declaration": true,
+    "declarationMap": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "include": ["src"]
+}

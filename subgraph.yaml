@@ -1,0 +1,72 @@
+specVersion: 0.0.2
+description: Perpetual Protocol trader position events and statistics
+repository: https://github.com/detoo/perp-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: ClearingHouse
+    network: xdai
+    source:
+      address: "0x70A747d26f3e12F15B1F964cb557493863e95043"
+      abi: ClearingHouse
+      startBlock: 13203591
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/clearingHouse.ts
+      entities:
+        - Position
+        - PositionChanged
+        - PositionLiquidated
+      abis:
+        - name: ClearingHouse
+          file: ./abis/ClearingHouse.json
+      eventHandlers:
+        - event: PositionChanged(address,address,uint256,uint256,int256,uint256,int256,int256,int256,uint256,uint256,uint256,uint256)
+          handler: handlePositionChanged
+        - event: PositionLiquidated(address,address,uint256,uint256,uint256,address,uint256)
+          handler: handlePositionLiquidated
+
+  - kind: ethereum/contract
+    name: AmmBTCUSDC
+    network: xdai
+    source:
+      address: "0xc086b84839C83444F9ebfdC1e3ce72E558f5476f"
+      abi: Amm
+      startBlock: 13203709
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/amm.ts
+      entities:
+        - FundingRateUpdated
+      abis:
+        - name: Amm
+          file: ./abis/Amm.json
+      eventHandlers:
+        - event: FundingRateUpdated(int256,uint256)
+          handler: handleFundingRateUpdated
+
+  - kind: ethereum/contract
+    name: AmmETHUSDC
+    network: xdai
+    source:
+      address: "0xC965e232913ba707a3Ad1259E47d94D9f213289c"
+      abi: Amm
+      startBlock: 13203702
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/amm.ts
+      entities:
+        - FundingRateUpdated
+      abis:
+        - name: Amm
+          file: ./abis/Amm.json
+      eventHandlers:
+        - event: FundingRateUpdated(int256,uint256)
+          handler: handleFundingRateUpdated

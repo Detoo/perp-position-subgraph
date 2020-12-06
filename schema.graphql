@@ -1,0 +1,65 @@
+type Position @entity {
+  id: ID!
+  trader: Bytes! # address
+  margin: BigInt! # uint256
+  positionNotional: BigInt! # uint256
+  realizedPnl: BigInt! # int256
+  unrealizedPnl: BigInt! # int256
+  fee: BigInt! # uint256
+  badDebt: BigInt! # uint256
+  liquidationPenalty: BigInt! # uint256
+  blockNumber: Int! # last updated block number
+  timestamp: Int! # last updated timestamp
+  ammPositions: [AmmPosition!] # breakdown for each Amm
+}
+
+type AmmPosition @entity {
+  id: ID!
+  amm: Bytes! # address
+  trader: Bytes! # address
+  margin: BigInt! # uint256
+  positionNotional: BigInt! # uint256
+  positionSize: BigInt! # int256
+  realizedPnl: BigInt! # int256
+  unrealizedPnl: BigInt! # int256
+  fee: BigInt! # uint256
+  badDebt: BigInt! # uint256
+  liquidationPenalty: BigInt! # uint256
+  blockNumber: Int! # last updated block number
+  timestamp: Int! # last updated timestamp
+}
+
+type PositionChangedEvent @entity {
+  id: ID!
+  trader: Bytes! # address
+  amm: Bytes! # address
+  margin: BigInt! # uint256
+  positionNotional: BigInt! # uint256
+  exchangedPositionSize: BigInt! # uint256
+  fee: BigInt! # uint256
+  positionSizeAfter: BigInt! # int256
+  realizedPnl: BigInt! # int256
+  unrealizedPnlAfter: BigInt! # int256
+  badDebt: BigInt! # uint256
+  liquidationPenalty: BigInt! # uint256
+  quoteAssetReserve: BigInt! # uint256
+  baseAssetReserve: BigInt! # uint256
+}
+
+type PositionLiquidatedEvent @entity {
+  id: ID!
+  trader: Bytes! # address
+  amm: Bytes! # address
+  positionNotional: BigInt! # uint256
+  positionSize: BigInt! # uint256
+  liquidationFee: BigInt! # uint256
+  liquidator: Bytes! # address
+  badDebt: BigInt! # uint256
+}
+
+type FundingRateUpdatedEvent @entity {
+  id: ID!
+  amm: Bytes! # address
+  rate: BigInt! # int256
+  underlyingPrice: BigInt! # int256
+}
