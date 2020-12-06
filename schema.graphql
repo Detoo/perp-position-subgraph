@@ -9,8 +9,8 @@ type Position @entity {
   badDebt: BigInt! # uint256
   liquidationPenalty: BigInt! # uint256
   ammPositions: [AmmPosition!] # breakdown for each Amm
-  blockNumber: BigInt! # last updated block number
-  timestamp: BigInt! # last updated timestamp
+  blockNumber: BigInt # last updated block number
+  timestamp: BigInt # last updated timestamp
 }
 
 type AmmPosition @entity {
@@ -25,8 +25,8 @@ type AmmPosition @entity {
   fee: BigInt! # uint256
   badDebt: BigInt! # uint256
   liquidationPenalty: BigInt! # uint256
-  blockNumber: BigInt! # last updated block number
-  timestamp: BigInt! # last updated timestamp
+  blockNumber: BigInt # last updated block number
+  timestamp: BigInt # last updated timestamp
 }
 
 type PositionChangedEvent @entity {
