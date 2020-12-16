@@ -4,9 +4,11 @@ type Position @entity {
   margin: BigInt! # uint256
   realizedPnl: BigInt! # int256
   unrealizedPnl: BigInt! # int256
+  fundingPayment: BigInt! # int256
   fee: BigInt! # uint256
   badDebt: BigInt! # uint256
   liquidationPenalty: BigInt! # uint256
+  totalPnlAmount: BigInt! # accumulated total PnL (realizedPnl - fundingPayment - fee - liquidationPenalty)
   ammPositions: [AmmPosition!]! @derivedFrom(field: "position") # breakdown for each Amm
   blockNumber: BigInt # last updated block number
   timestamp: BigInt # last updated timestamp
@@ -20,9 +22,11 @@ type AmmPosition @entity {
   positionSize: BigInt! # int256
   realizedPnl: BigInt! # int256
   unrealizedPnl: BigInt! # int256
+  fundingPayment: BigInt! # int256
   fee: BigInt! # uint256
   badDebt: BigInt! # uint256
   liquidationPenalty: BigInt! # uint256
+  totalPnlAmount: BigInt! # accumulated total PnL (realizedPnl - fundingPayment - fee - liquidationPenalty)
   position: Position!
   blockNumber: BigInt # last updated block number
   timestamp: BigInt # last updated timestamp
@@ -41,8 +45,8 @@ type PositionChangedEvent @entity {
   unrealizedPnlAfter: BigInt! # int256
   badDebt: BigInt! # uint256
   liquidationPenalty: BigInt! # uint256
-  quoteAssetReserve: BigInt! # uint256
-  baseAssetReserve: BigInt! # uint256
+  spotPrice: BigInt! # uint256
+  fundingPayment: BigInt! # int256
   blockNumber: BigInt! # last updated block number
   timestamp: BigInt! # last updated timestamp
 }
@@ -65,6 +69,16 @@ type FundingRateUpdatedEvent @entity {
   amm: Bytes! # address
   rate: BigInt! # int256
   underlyingPrice: BigInt! # int256
+  blockNumber: BigInt! # last updated block number
+  timestamp: BigInt! # last updated timestamp
+}
+
+type MarginChangedEvent @entity {
+  id: ID!
+  sender: Bytes! # address
+  amm: Bytes! # address
+  marginChanged: BigInt! #int256
+  fundingPayment: BigInt! # int256
   blockNumber: BigInt! # last updated block number
   timestamp: BigInt! # last updated timestamp
 }

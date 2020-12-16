@@ -16,13 +16,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "sender",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "amm",
         "type": "address"
@@ -31,6 +31,12 @@
         "indexed": false,
         "internalType": "int256",
         "name": "amount",
+        "type": "int256"
+      },
+      {
+        "indexed": false,
+        "internalType": "int256",
+        "name": "fundingPayment",
         "type": "int256"
       }
     ],
@@ -86,13 +92,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "amm",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "trader",
         "type": "address"
@@ -123,13 +129,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "trader",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "amm",
         "type": "address"
@@ -191,14 +197,14 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "quoteAssetReserve",
+        "name": "spotPrice",
         "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "baseAssetReserve",
-        "type": "uint256"
+        "internalType": "int256",
+        "name": "fundingPayment",
+        "type": "int256"
       }
     ],
     "name": "PositionChanged",
@@ -208,13 +214,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "trader",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "amm",
         "type": "address"
@@ -257,13 +263,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "amm",
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "trader",
         "type": "address"
@@ -341,81 +347,10 @@
         "internalType": "contract IAmm",
         "name": "_amm",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_trader",
-        "type": "address"
       }
     ],
-    "name": "adjustPositionForLiquidityChanged",
-    "outputs": [
-      {
-        "components": [
-          {
-            "components": [
-              {
-                "internalType": "int256",
-                "name": "d",
-                "type": "int256"
-              }
-            ],
-            "internalType": "struct SignedDecimal.signedDecimal",
-            "name": "size",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
-                "name": "d",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct Decimal.decimal",
-            "name": "margin",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "uint256",
-                "name": "d",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct Decimal.decimal",
-            "name": "openNotional",
-            "type": "tuple"
-          },
-          {
-            "components": [
-              {
-                "internalType": "int256",
-                "name": "d",
-                "type": "int256"
-              }
-            ],
-            "internalType": "struct SignedDecimal.signedDecimal",
-            "name": "lastUpdatedCumulativePremiumFraction",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256",
-            "name": "liquidityHistoryIndex",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "blockNumber",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ClearingHouse.Position",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
+    "name": "adjustPosition",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -1106,6 +1041,19 @@
     "name": "settlePosition",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "trustedForwarder",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

@@ -25,9 +25,15 @@ export function handlePositionChanged(event: PositionChanged): void {
   position.margin = position.margin.minus(ammPosition.margin).plus(event.params.margin) // snapshot
   position.realizedPnl = position.realizedPnl.plus(event.params.realizedPnl) // delta
   position.unrealizedPnl = event.params.unrealizedPnlAfter
+  position.fundingPayment = position.fundingPayment.plus(event.params.fundingPayment)
   position.fee = position.fee.plus(event.params.fee)
   position.badDebt = position.badDebt.plus(event.params.badDebt)
   position.liquidationPenalty = position.liquidationPenalty.plus(event.params.liquidationPenalty)
+  position.totalPnlAmount = position.totalPnlAmount
+    .plus(event.params.realizedPnl)
+    .minus(event.params.fundingPayment)
+    .minus(event.params.fee)
+    .minus(event.params.liquidationPenalty)
   position.blockNumber = event.block.number
   position.timestamp = event.block.timestamp
 
@@ -36,9 +42,15 @@ export function handlePositionChanged(event: PositionChanged): void {
   ammPosition.positionSize = event.params.positionSizeAfter
   ammPosition.realizedPnl = ammPosition.realizedPnl.plus(event.params.realizedPnl) // delta
   ammPosition.unrealizedPnl = event.params.unrealizedPnlAfter
+  ammPosition.fundingPayment = ammPosition.fundingPayment.plus(event.params.fundingPayment)
   ammPosition.fee = ammPosition.fee.plus(event.params.fee)
   ammPosition.badDebt = ammPosition.badDebt.plus(event.params.badDebt)
   ammPosition.liquidationPenalty = ammPosition.liquidationPenalty.plus(event.params.liquidationPenalty)
+  ammPosition.totalPnlAmount = ammPosition.totalPnlAmount
+    .plus(event.params.realizedPnl)
+    .minus(event.params.fundingPayment)
+    .minus(event.params.fee)
+    .minus(event.params.liquidationPenalty)
   ammPosition.blockNumber = event.block.number
   ammPosition.timestamp = event.block.timestamp
 
@@ -57,8 +69,8 @@ export function handlePositionChanged(event: PositionChanged): void {
   positionChanged.unrealizedPnlAfter = event.params.unrealizedPnlAfter
   positionChanged.badDebt = event.params.badDebt
   positionChanged.liquidationPenalty = event.params.liquidationPenalty
-  positionChanged.quoteAssetReserve = event.params.quoteAssetReserve
-  positionChanged.baseAssetReserve = event.params.baseAssetReserve
+  positionChanged.spotPrice = event.params.spotPrice
+  positionChanged.fundingPayment = event.params.fundingPayment
   positionChanged.blockNumber = event.block.number
   positionChanged.timestamp = event.block.timestamp
 
@@ -99,11 +111,15 @@ export function handleMarginChanged(event: MarginChanged): void {
 
   // upsert corresponding Position
   position.margin = position.margin.plus(event.params.amount) // delta
+  position.fundingPayment = position.fundingPayment.plus(event.params.fundingPayment)
+  position.totalPnlAmount = position.totalPnlAmount.minus(event.params.fundingPayment)
   position.blockNumber = event.block.number
   position.timestamp = event.block.timestamp
 
   // upsert corresponding AmmPosition
   ammPosition.margin = ammPosition.margin.plus(event.params.amount) // delta
+  ammPosition.fundingPayment = ammPosition.fundingPayment.plus(event.params.fundingPayment)
+  ammPosition.totalPnlAmount = ammPosition.totalPnlAmount.minus(event.params.fundingPayment)
   ammPosition.blockNumber = event.block.number
   ammPosition.timestamp = event.block.timestamp
 

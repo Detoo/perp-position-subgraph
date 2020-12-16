@@ -8,9 +8,9 @@ dataSources:
     name: ClearingHouse
     network: xdai
     source:
-      address: "0x425e0EC09f9Bcdfd20283Bf23251cCB74D118813"
+      address: "0x5d9593586b4B5edBd23E7Eba8d88FD8F09D83EBd"
       abi: ClearingHouse
-      startBlock: 13203591
+      startBlock: 13507324
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -20,24 +20,25 @@ dataSources:
         - Position
         - PositionChanged
         - PositionLiquidated
+        - MarginChanged
       abis:
         - name: ClearingHouse
           file: ./abis/ClearingHouse.json
       eventHandlers:
-        - event: PositionChanged(address,address,uint256,uint256,int256,uint256,int256,int256,int256,uint256,uint256,uint256,uint256)
+        - event: PositionChanged(indexed address,indexed address,uint256,uint256,int256,uint256,int256,int256,int256,uint256,uint256,uint256,int256)
           handler: handlePositionChanged
-        - event: PositionLiquidated(address,address,uint256,uint256,uint256,address,uint256)
+        - event: PositionLiquidated(indexed address,indexed address,uint256,uint256,uint256,address,uint256)
           handler: handlePositionLiquidated
-        - event: MarginChanged(address,address,int256)
+        - event: MarginChanged(indexed address,indexed address,int256,int256)
           handler: handleMarginChanged
 
   - kind: ethereum/contract
     name: AmmBTCUSDC
     network: xdai
     source:
-      address: "0xc086b84839C83444F9ebfdC1e3ce72E558f5476f"
+      address: "0x0f346e19F01471C02485DF1758cfd3d624E399B4"
       abi: Amm
-      startBlock: 13203709
+      startBlock: 13507362
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -56,9 +57,9 @@ dataSources:
     name: AmmETHUSDC
     network: xdai
     source:
-      address: "0xC965e232913ba707a3Ad1259E47d94D9f213289c"
+      address: "0x8d22F1a9dCe724D8c1B4c688D75f17A2fE2D32df"
       abi: Amm
-      startBlock: 13203702
+      startBlock: 13507353
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

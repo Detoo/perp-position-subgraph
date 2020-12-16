@@ -4,6 +4,25 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "maxHoldingBaseAsset",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "openInterestNotionalCap",
+        "type": "uint256"
+      }
+    ],
+    "name": "CapChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "int256",
         "name": "rate",
         "type": "int256"
