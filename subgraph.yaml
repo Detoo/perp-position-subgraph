@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 description: Perpetual Protocol trader position events and statistics
-repository: https://github.com/detoo/perp-subgraph
+repository: https://github.com/perpetual-protocol/perp-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
