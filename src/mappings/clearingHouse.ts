@@ -52,7 +52,7 @@ export function handlePositionChanged(event: PositionChanged): void {
   ammPosition.positionSize = newAmmPositionSize
   ammPosition.openNotional = newAmmOpenNotional
   ammPosition.leverage = newAmmMargin.isZero()? BigInt.fromI32(0) : decimal.div(newAmmOpenNotional, newAmmMargin)
-  ammPosition.entryPrice = newAmmPositionSize.isZero()? BigInt.fromI32(0) : decimal.div(newAmmOpenNotional, newAmmPositionSize)
+  ammPosition.entryPrice = newAmmPositionSize.isZero()? BigInt.fromI32(0) : decimal.div(newAmmOpenNotional, newAmmPositionSize).abs()
   ammPosition.realizedPnl = ammPosition.realizedPnl.plus(event.params.realizedPnl) // delta
   ammPosition.unrealizedPnl = event.params.unrealizedPnlAfter
   ammPosition.fundingPayment = ammPosition.fundingPayment.plus(event.params.fundingPayment)
