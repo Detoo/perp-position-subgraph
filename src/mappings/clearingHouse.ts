@@ -12,6 +12,7 @@ import {
 import {
   getPosition, parsePositionId, createPosition,
   getAmmPosition, parseAmmPositionId, createAmmPosition,
+  calcNewAmmOpenNotional,
 } from "./helper"
 
 /* Trader open/close/modify position
@@ -21,8 +22,16 @@ export function handlePositionChanged(event: PositionChanged): void {
   let position = getPosition(event.params.trader)
   let ammPosition = getAmmPosition(event.params.amm, event.params.trader)
 
+  let newAmmMargin = event.params.margin
+  let newMargin = position.margin.minus(ammPosition.margin).plus(event.params.margin)
+  let newAmmOpenNotional = calcNewAmmOpenNotional(ammPosition, event)
+  let newOpenNotional = position.openNotional.minus(ammPosition.openNotional).plus(newAmmOpenNotional)
+  let newAmmPositionSize = event.params.positionSizeAfter
+
   // upsert corresponding Position
-  position.margin = position.margin.minus(ammPosition.margin).plus(event.params.margin) // snapshot
+  position.margin = newMargin // snapshot
+  position.openNotional = newOpenNotional
+  position.leverage = newOpenNotional.div(newMargin)
   position.realizedPnl = position.realizedPnl.plus(event.params.realizedPnl) // delta
   position.unrealizedPnl = event.params.unrealizedPnlAfter
   position.fundingPayment = position.fundingPayment.plus(event.params.fundingPayment)
@@ -38,8 +47,11 @@ export function handlePositionChanged(event: PositionChanged): void {
   position.timestamp = event.block.timestamp
 
   // upsert corresponding AmmPosition
-  ammPosition.margin = event.params.margin // snapshot
-  ammPosition.positionSize = event.params.positionSizeAfter
+  ammPosition.margin = newAmmMargin
+  ammPosition.positionSize = newAmmPositionSize
+  ammPosition.openNotional = newAmmOpenNotional
+  ammPosition.leverage = newAmmOpenNotional.div(newAmmMargin)
+  ammPosition.entryPrice = newAmmOpenNotional.div(newAmmPositionSize)
   ammPosition.realizedPnl = ammPosition.realizedPnl.plus(event.params.realizedPnl) // delta
   ammPosition.unrealizedPnl = event.params.unrealizedPnlAfter
   ammPosition.fundingPayment = ammPosition.fundingPayment.plus(event.params.fundingPayment)
