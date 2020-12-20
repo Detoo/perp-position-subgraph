@@ -14,6 +14,7 @@ import {
   getAmmPosition, parseAmmPositionId, createAmmPosition,
   calcNewAmmOpenNotional,
 } from "./helper"
+import { BigInt } from "@graphprotocol/graph-ts"
 
 /* Trader open/close/modify position
  */
@@ -31,7 +32,7 @@ export function handlePositionChanged(event: PositionChanged): void {
   // upsert corresponding Position
   position.margin = newMargin // snapshot
   position.openNotional = newOpenNotional
-  position.leverage = newOpenNotional.div(newMargin)
+  position.leverage = newMargin.isZero()? BigInt.fromI32(0) : newOpenNotional.div(newMargin)
   position.realizedPnl = position.realizedPnl.plus(event.params.realizedPnl) // delta
   position.unrealizedPnl = event.params.unrealizedPnlAfter
   position.fundingPayment = position.fundingPayment.plus(event.params.fundingPayment)
@@ -50,8 +51,8 @@ export function handlePositionChanged(event: PositionChanged): void {
   ammPosition.margin = newAmmMargin
   ammPosition.positionSize = newAmmPositionSize
   ammPosition.openNotional = newAmmOpenNotional
-  ammPosition.leverage = newAmmOpenNotional.div(newAmmMargin)
-  ammPosition.entryPrice = newAmmOpenNotional.div(newAmmPositionSize)
+  ammPosition.leverage = newAmmMargin.isZero()? BigInt.fromI32(0) : newAmmOpenNotional.div(newAmmMargin)
+  ammPosition.entryPrice = newAmmPositionSize.isZero()? BigInt.fromI32(0) : newAmmOpenNotional.div(newAmmPositionSize)
   ammPosition.realizedPnl = ammPosition.realizedPnl.plus(event.params.realizedPnl) // delta
   ammPosition.unrealizedPnl = event.params.unrealizedPnlAfter
   ammPosition.fundingPayment = ammPosition.fundingPayment.plus(event.params.fundingPayment)
