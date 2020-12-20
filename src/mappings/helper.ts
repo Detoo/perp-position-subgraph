@@ -83,3 +83,9 @@ export function calcNewAmmOpenNotional(ammPosition: AmmPosition, event: Position
     )
     .abs()
 }
+
+export namespace decimal {
+  export function div(a: BigInt, b: BigInt): BigInt {
+    return a.times(BigInt.fromI32(10).pow(18)).div(b)
+  }
+}
