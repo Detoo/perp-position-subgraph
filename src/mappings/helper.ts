@@ -1,5 +1,6 @@
 import { AmmPosition, Position } from "../../generated/schema"
 import { BigInt, Address } from "@graphprotocol/graph-ts"
+import { PositionChanged } from "../../generated/ClearingHouse/ClearingHouse"
 
 export function getPosition(trader: Address): Position {
   let position = Position.load(parsePositionId(trader))
@@ -13,6 +14,8 @@ export function createPosition(trader: Address): Position {
   let position = new Position(parsePositionId(trader))
   position.trader = trader
   position.margin = BigInt.fromI32(0)
+  position.openNotional = BigInt.fromI32(0)
+  position.leverage = BigInt.fromI32(0)
   position.realizedPnl = BigInt.fromI32(0)
   position.unrealizedPnl = BigInt.fromI32(0)
   position.fundingPayment = BigInt.fromI32(0)
@@ -45,6 +48,9 @@ export function createAmmPosition(amm: Address, trader: Address): AmmPosition {
   ammPosition.trader = trader
   ammPosition.margin = BigInt.fromI32(0)
   ammPosition.positionSize = BigInt.fromI32(0)
+  ammPosition.openNotional = BigInt.fromI32(0)
+  ammPosition.leverage = BigInt.fromI32(0)
+  ammPosition.entryPrice = BigInt.fromI32(0)
   ammPosition.realizedPnl = BigInt.fromI32(0)
   ammPosition.unrealizedPnl = BigInt.fromI32(0)
   ammPosition.fundingPayment = BigInt.fromI32(0)
@@ -61,4 +67,25 @@ export function createAmmPosition(amm: Address, trader: Address): AmmPosition {
 
 export function parseAmmPositionId(amm: Address, trader: Address): string {
   return amm.toHexString() + "-" + trader.toHexString()
+}
+
+export function calcNewAmmOpenNotional(ammPosition: AmmPosition, event: PositionChanged): BigInt {
+  let signedOpenNotional = ammPosition.positionSize.ge(BigInt.fromI32(0))
+    ? ammPosition.openNotional
+    : ammPosition.openNotional.neg()
+
+  return signedOpenNotional
+    .plus(event.params.realizedPnl)
+    .plus(
+      (event.params.exchangedPositionSize.ge(BigInt.fromI32(0)))
+        ? event.params.positionNotional
+        : event.params.positionNotional.neg()
+    )
+    .abs()
+}
+
+export namespace decimal {
+  export function div(a: BigInt, b: BigInt): BigInt {
+    return a.times(BigInt.fromI32(10).pow(18)).div(b)
+  }
 }
