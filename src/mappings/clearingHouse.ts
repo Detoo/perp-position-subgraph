@@ -44,6 +44,7 @@ export function handlePositionChanged(event: PositionChanged): void {
     .minus(event.params.fundingPayment)
     .minus(event.params.fee)
     .minus(event.params.liquidationPenalty)
+    .plus(event.params.badDebt)
   position.blockNumber = event.block.number
   position.timestamp = event.block.timestamp
 
@@ -64,6 +65,7 @@ export function handlePositionChanged(event: PositionChanged): void {
     .minus(event.params.fundingPayment)
     .minus(event.params.fee)
     .minus(event.params.liquidationPenalty)
+    .plus(event.params.badDebt)
   ammPosition.blockNumber = event.block.number
   ammPosition.timestamp = event.block.timestamp
 
