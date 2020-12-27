@@ -32,6 +32,7 @@ export function handlePositionChanged(event: PositionChanged): void {
   // upsert corresponding Position
   position.margin = newMargin // snapshot
   position.openNotional = newOpenNotional
+  position.tradingVolume = position.tradingVolume.plus(event.params.positionNotional)
   position.leverage = newMargin.isZero()? BigInt.fromI32(0) : decimal.div(newOpenNotional, newMargin)
   position.realizedPnl = position.realizedPnl.plus(event.params.realizedPnl) // delta
   position.unrealizedPnl = event.params.unrealizedPnlAfter
@@ -52,6 +53,7 @@ export function handlePositionChanged(event: PositionChanged): void {
   ammPosition.margin = newAmmMargin
   ammPosition.positionSize = newAmmPositionSize
   ammPosition.openNotional = newAmmOpenNotional
+  ammPosition.tradingVolume = ammPosition.tradingVolume.plus(event.params.positionNotional)
   ammPosition.leverage = newAmmMargin.isZero()? BigInt.fromI32(0) : decimal.div(newAmmOpenNotional, newAmmMargin)
   ammPosition.entryPrice = newAmmPositionSize.isZero()? BigInt.fromI32(0) : decimal.div(newAmmOpenNotional, newAmmPositionSize).abs()
   ammPosition.realizedPnl = ammPosition.realizedPnl.plus(event.params.realizedPnl) // delta

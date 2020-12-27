@@ -15,6 +15,7 @@ export function createPosition(trader: Address): Position {
   position.trader = trader
   position.margin = BigInt.fromI32(0)
   position.openNotional = BigInt.fromI32(0)
+  position.tradingVolume = BigInt.fromI32(0)
   position.leverage = BigInt.fromI32(0)
   position.realizedPnl = BigInt.fromI32(0)
   position.unrealizedPnl = BigInt.fromI32(0)
@@ -49,6 +50,7 @@ export function createAmmPosition(amm: Address, trader: Address): AmmPosition {
   ammPosition.margin = BigInt.fromI32(0)
   ammPosition.positionSize = BigInt.fromI32(0)
   ammPosition.openNotional = BigInt.fromI32(0)
+  ammPosition.tradingVolume = BigInt.fromI32(0)
   ammPosition.leverage = BigInt.fromI32(0)
   ammPosition.entryPrice = BigInt.fromI32(0)
   ammPosition.realizedPnl = BigInt.fromI32(0)
