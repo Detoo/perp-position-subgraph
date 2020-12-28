@@ -3,6 +3,7 @@ type Position @entity {
   trader: Bytes! # address
   margin: BigInt! # uint256
   openNotional: BigInt! # total position notional values at open
+  tradingVolume: BigInt! # trading volume in notional value
   leverage: BigInt! # openNotional / margin
   realizedPnl: BigInt! # int256
   unrealizedPnl: BigInt! # int256
@@ -23,6 +24,7 @@ type AmmPosition @entity {
   margin: BigInt! # uint256
   positionSize: BigInt! # int256
   openNotional: BigInt! # position notional value at open
+  tradingVolume: BigInt! # trading volume in notional value
   leverage: BigInt! # openNotional / margin
   entryPrice: BigInt! # openNotional / positionSize
   realizedPnl: BigInt! # int256
