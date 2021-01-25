@@ -127,7 +127,7 @@ export function handleMarginChanged(event: MarginChanged): void {
   let ammPosition = getAmmPosition(event.params.amm, event.params.sender)
 
   // upsert corresponding Position
-  position.margin = position.margin.plus(event.params.amount) // delta
+  position.margin = position.margin.plus(event.params.amount).minus(event.params.fundingPayment) // delta
   position.fundingPayment = position.fundingPayment.plus(event.params.fundingPayment)
   position.totalPnlAmount = position.totalPnlAmount.minus(event.params.fundingPayment)
   position.blockNumber = event.block.number
