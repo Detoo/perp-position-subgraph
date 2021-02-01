@@ -18,9 +18,10 @@ dataSources:
       file: ./src/mappings/clearingHouse.ts
       entities:
         - Position
-        - PositionChanged
-        - PositionLiquidated
-        - MarginChanged
+        - AmmPosition
+        - PositionChangedEvent
+        - PositionLiquidatedEvent
+        - MarginChangedEvent
       abis:
         - name: ClearingHouse
           file: ./abis/ClearingHouse.json
