@@ -8,6 +8,7 @@ import {
   AmmPosition,
   PositionChangedEvent,
   PositionLiquidatedEvent,
+  MarginChangedEvent,
 } from "../../generated/schema"
 import {
   getPosition, parsePositionId, createPosition,
@@ -140,7 +141,19 @@ export function handleMarginChanged(event: MarginChanged): void {
   ammPosition.blockNumber = event.block.number
   ammPosition.timestamp = event.block.timestamp
 
+  //
+  // insert MarginChanged event
+  //
+  let marginChanged = new MarginChangedEvent(event.transaction.hash.toHexString() + "-" + event.logIndex.toString())
+  marginChanged.sender = event.params.sender
+  marginChanged.amm = event.params.amm
+  marginChanged.amount = event.params.amount
+  marginChanged.fundingPayment = event.params.fundingPayment
+  marginChanged.blockNumber = event.block.number
+  marginChanged.timestamp = event.block.timestamp
+
   // commit changes
   position.save()
   ammPosition.save()
+  marginChanged.save()
 }
