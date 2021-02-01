@@ -18,9 +18,10 @@ dataSources:
       file: ./src/mappings/clearingHouse.ts
       entities:
         - Position
-        - PositionChanged
-        - PositionLiquidated
-        - MarginChanged
+        - AmmPosition
+        - PositionChangedEvent
+        - PositionLiquidatedEvent
+        - MarginChangedEvent
       abis:
         - name: ClearingHouse
           file: ./abis/ClearingHouse.json
@@ -45,7 +46,7 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/amm.ts
       entities:
-        - FundingRateUpdated
+        - FundingRateUpdatedEvent
       abis:
         - name: Amm
           file: ./abis/Amm.json
@@ -66,14 +67,14 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/amm.ts
       entities:
-        - FundingRateUpdated
+        - FundingRateUpdatedEvent
       abis:
         - name: Amm
           file: ./abis/Amm.json
       eventHandlers:
         - event: FundingRateUpdated(int256,uint256)
           handler: handleFundingRateUpdated
-  
+
   - kind: ethereum/contract
     name: AmmDOTUSDC
     network: xdai
@@ -87,14 +88,14 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/amm.ts
       entities:
-        - FundingRateUpdated
+        - FundingRateUpdatedEvent
       abis:
         - name: Amm
           file: ./abis/Amm.json
       eventHandlers:
         - event: FundingRateUpdated(int256,uint256)
           handler: handleFundingRateUpdated
-  
+
   - kind: ethereum/contract
     name: AmmYFIUSDC
     network: xdai
@@ -108,14 +109,14 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/amm.ts
       entities:
-        - FundingRateUpdated
+        - FundingRateUpdatedEvent
       abis:
         - name: Amm
           file: ./abis/Amm.json
       eventHandlers:
         - event: FundingRateUpdated(int256,uint256)
           handler: handleFundingRateUpdated
-  
+
   - kind: ethereum/contract
     name: AmmSNXUSDC
     network: xdai
@@ -129,7 +130,7 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/amm.ts
       entities:
-        - FundingRateUpdated
+        - FundingRateUpdatedEvent
       abis:
         - name: Amm
           file: ./abis/Amm.json
