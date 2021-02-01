@@ -84,7 +84,7 @@ type MarginChangedEvent @entity {
   id: ID!
   sender: Bytes! # address
   amm: Bytes! # address
-  marginChanged: BigInt! #int256
+  amount: BigInt! #int256
   fundingPayment: BigInt! # int256
   blockNumber: BigInt! # last updated block number
   timestamp: BigInt! # last updated timestamp
